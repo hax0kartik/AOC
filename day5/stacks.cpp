@@ -35,11 +35,8 @@ class Solution{
                     for(int i = 0; i < n; i++){
                         auto elem = m_stacks[from - 1].front();
                         m_stacks[from - 1].pop_front();
-                        elems.push_back(elem);
-                    }
-
-                    for(int i = 0; i < elems.size(); i++){
-                        m_stacks[to - 1].push_front(elems[elems.size() - i - 1]);
+                        auto it = std::next(m_stacks[to - 1].begin(), i);
+                        m_stacks[to - 1].insert(it, elem);
                     }
                 }
             }
