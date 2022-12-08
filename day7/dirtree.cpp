@@ -45,10 +45,6 @@ class DirectoryTree{
             m_curr = m_root;
         }
 
-        void AddSubDirToCurr(const std::string &path){
-            m_curr->subdirs.push_back(new Node(path, m_curr));
-        }
-
         void AddSize(long size){
             m_curr->size += size;
             Node *temp = m_curr;
@@ -58,13 +54,10 @@ class DirectoryTree{
             }
         }
 
-        void GoToNode(const std::string &s){
-            for(auto* dirs : m_curr->subdirs){
-                if(dirs->path == s){
-                    m_curr = dirs;
-                    break;
-                }
-            }
+        void AddNodeAndChangeTo(const std::string &s){
+            auto* node = new Node(s, m_curr);
+            m_curr->subdirs.push_back(node);
+            m_curr = node;
         }
 
         void GoBack(){
@@ -102,8 +95,8 @@ int main(){
                 tree = new DirectoryTree(word);
             else if(word == "..")
                 tree->GoBack();
-            else 
-                tree->GoToNode(word);
+            else
+                tree->AddNodeAndChangeTo(word);
             f >> word;
         } else {
             /* ls */
@@ -112,7 +105,6 @@ int main(){
                 f >> word;
                 if(word == "dir") {
                     f >> word;
-                    tree->AddSubDirToCurr(word);
                 } else if(word != "$") {
                     tree->AddSize(std::stol(word));
                     f >> word;
